@@ -11,7 +11,7 @@ use crate::pairing::{
     CurveAffine
 };
 
-use crate::pairing::ff::{    
+use crate::pairing::ff::{
     PrimeField,
     Field
 };
@@ -204,7 +204,6 @@ pub fn generate_parameters<E, C>(
 
     // Synthesize the circuit.
     circuit.synthesize(&mut assembly)?;
-
     // Input constraints to ensure full density of IC query
     // x * 0 = 0
     for i in 0..assembly.num_inputs {
@@ -214,7 +213,6 @@ pub fn generate_parameters<E, C>(
             |lc| lc,
         );
     }
-
     elog_verbose!("Making {} powers of tau", assembly.num_constraints);
     // Create bases for blind evaluation of polynomials at tau
     let powers_of_tau = vec![Scalar::<E>(E::Fr::zero()); assembly.num_constraints];
@@ -319,7 +317,7 @@ pub fn generate_parameters<E, C>(
     let mut l = vec![E::G1::zero(); assembly.num_aux];
 
     elog_verbose!("evaluating polynomials...");
-    
+
     let _stopwatch = Stopwatch::new();
 
     fn eval<E: Engine>(
@@ -497,6 +495,17 @@ pub fn generate_parameters<E, C>(
     };
 
     log!("Has generated {} points", a.len());
+    log!("================================");
+    log!("num_inputs: {}", assembly.num_inputs);
+    log!("num_aux: {}", assembly.num_aux);
+    log!("num_constraints: {}", assembly.num_constraints);
+    log!("at_inputs: {}", assembly.at_inputs.len());
+    log!("bt_inputs: {}", assembly.bt_inputs.len());
+    log!("ct_inputs: {}", assembly.ct_inputs.len());
+    log!("at_aux: {}", assembly.at_aux.len());
+    log!("bt_aux: {}", assembly.bt_aux.len());
+    log!("ct_aux: {}", assembly.ct_aux.len());
+    log!("================================");
 
     Ok(Parameters {
         vk: vk,
